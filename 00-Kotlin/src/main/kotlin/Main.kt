@@ -131,6 +131,61 @@ fun main(){
     print(respuestaFilterDos)
 
 
+    // OPERADORES OR y AND
+    // OR -> ANY (alguno cumple)
+    // AND -> ALL (todos cumplen)
+
+    val respuestaAny: Boolean = arregloDinamico
+        .any{valorActual: Int ->
+        return@any (valorActual > 5)
+    }
+    println(respuestaAny)
+    val respuestaAll: Boolean = arregloDinamico
+        .all{valorActual: Int ->
+            return@all (valorActual > 5)
+        }
+    println(respuestaAll)
+
+    // REDUCE -> devuelve valor acumulado
+    // 1) devuelve el valor acumulado
+    // 2) en que valor empieza
+
+    // [1, 2, 3, 4, 5] -> sumemos todos los valores del arreglo
+    // perite trabajar con los elementos del arreglo
+
+    val respuestaReduce: Int = arregloDinamico
+        .reduce{//acumulado = 0 -> simepre empieza en 0
+            acumulado: Int, valorActual: Int ->
+            return@reduce acumulado + valorActual;
+        }
+    println(respuestaReduce)
+
+    // 100
+    val arregloDanio = arrayListOf<Int>(12, 15, 8, 10)
+    val respuestaReduceFold = arregloDanio
+        .fold(100
+        ) { acumulado, valorActualIteracion ->
+            return@fold acumulado + valorActualIteracion
+        }
+    println(respuestaReduceFold)
+
+    val vidaActual: Int = arregloDinamico
+        .map { it * 2 }
+        .filter { it > 20 }
+        .fold(100) { acc, i -> acc - i }
+        .also { println(it) }
+    println("vida actual $vidaActual")
+
+    val ejemploUno = Suma(1, 2)
+    val ejemploDos = Suma(null, 2)
+    val ejemploTres = Suma(1, null)
+
+    println(ejemploUno.sumar())
+    println(Suma.historialSumas)
+    println(ejemploDos.sumar())
+    println(Suma.historialSumas)
+    println(ejemploTres.sumar())
+    println(Suma.historialSumas)
 
 } // FIN BLOQUE MAIN
 
@@ -155,4 +210,69 @@ fun calcularSueldo(
     return sueldo * (100 / tasa) + bonoEspecial;
 }
 
+abstract class NumerosJava{
+    protected val numero1: Int
+    private val numero2: Int
 
+    constructor(
+        uno: Int, //parametro requerido
+        dos: Int //parametro requerido
+    )
+    {
+        numero1 = uno;
+        numero2 = dos
+        println("Inicializar")
+    }
+}
+
+abstract class Numeros(//constructor primario
+    protected  var numeroUno: Int, // propiedad
+    protected  var numeroDos: Int,
+){
+    init { //bloque de inicio del constructor primario
+        println("inicializar")
+    }
+}
+class Suma(
+    uno: Int, // parametro requerido
+    dos: Int
+): Numeros( //constructor papa (super)
+    uno,
+    dos
+){
+    init {
+        this.numeroUno
+        this.numeroDos
+    }
+    constructor(//segundo constructor
+        uno: Int?,
+        dos: Int
+    ): this(// llamda constructor primario
+        if(uno == null) 0 else uno,
+        dos
+    )
+    constructor(//tercer constructor
+        uno: Int,
+        dos: Int?
+    ): this(// llamada constructor primario
+        uno,
+        if(dos == null) 0 else dos,
+
+    )
+    // por defecto todas las propiedades, fnciones son publicas por defecto
+    fun sumar(): Int{
+        val total: Int = numeroUno + numeroDos
+        agregarHistorial(total)
+        return total;
+    }
+
+    // SINGLETON -> no se van a instancias varias veces lo q este ahi
+    companion object{
+        val historialSumas = arrayListOf<Int>()
+        fun agregarHistorial(valorNuevaSuma: Int){
+            historialSumas.add(valorNuevaSuma)
+            println(historialSumas)
+        }
+    }
+
+}
