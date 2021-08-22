@@ -23,8 +23,21 @@ class MainActivity : AppCompatActivity() {
         botonIrListView.setOnClickListener {
             abrirActividad(BListView::class.java)
         }
-    }
 
+        val botonIrIntent = findViewById<Button>(R.id.btn_ir_intent)
+        botonIrIntent.setOnClickListener {
+            abrirActividadConParametros(CIntentExplicitoParametros::class.java)
+        }
+    }
+    fun abrirActividadConParametros(clase: Class<*>){
+        val intentExplicito = Intent(this, clase);
+
+        // enviar parametros al activity.
+        intentExplicito.putExtra("nombre","Jona");
+        intentExplicito.putExtra("apellido","Vargas");
+        intentExplicito.putExtra("edad",24);
+        startActivity(intentExplicito);
+    }
     fun abrirActividad(clase: Class<*>){
         val intentExplicito = Intent(
             this,
